@@ -40,8 +40,8 @@ function createVM(params) {
                     if (res.code === 201) {
                         resolve(res);
                     } else {
-                        let j = JSON.parse(res.data);
-                        reject(new Error("Unity Connection Error: "+j.errors.code +", "+j.errors.message));
+                        let json = JSON.parse(res.data);
+                        reject(new Error("Unity Connection Error: "+json.errors.code +", "+j.errors.message));
                     }
                 }).catch((err)=>{
                     reject(new Error("Error: "+err.message));
