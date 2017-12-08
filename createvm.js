@@ -1,3 +1,5 @@
+main();
+
 /*
 * params = {
 *    alias:"usera",
@@ -17,7 +19,7 @@ function createVM(params) {
         if (!params) reject(new Error("undefined parameters, cant create vm"));
         let template = "usertemplate";
         let uri = "/vmrest/import/users/ldap?query=(alias%20is%20"+params.alias+")";
-        req.getVMObject(uri).then((response)=>{
+        getVMObject(uri).then((response)=>{
             let temp = JSON.stringify(response);
             let json = JSON.parse(temp);
             if (json.code === 200) {
@@ -34,7 +36,7 @@ function createVM(params) {
             } else if (json['@total'] !== '0') {
                 uri = "/vmrest/import/users/ldap?templateAlias="+template[params.sitecode];
                 json.ImportUser.dtmfAccessId = params.line;
-                req.addVMObject(uri,JSON.stringify(json.ImportUser)).then((res)=>{
+                addVMObject(uri,JSON.stringify(json.ImportUser)).then((res)=>{
                     if (res.code === 201) {
                         resolve(res);
                     } else {
@@ -51,4 +53,61 @@ function createVM(params) {
             reject(new Error(err.message));
         });
     });
+}
+
+// driver function
+function main(params) {
+    createVM(params).then((res)=>{
+        // insert your own logic
+    }).catch((err)=>{
+        //insert your own logic
+    });
+}
+
+// send get request to unity server
+function getVMObject(query) {
+	return voicemailHttpRequest(query,"GET");
+}
+
+// add any object to unity server
+function addVMObject(uri,body) {
+	return voicemailHttpRequest(uri,"POST",undefined,body);
+}
+
+// makes http request to unity server
+function voicemailHttpRequest(query,httpMethod,custHeader,body) {
+	return new Promise((resolve,reject)=> {
+		let header = {
+		    "Authorization": "creds",   // Basic authentication is expected
+	        "Accept": "application/json",
+		    "content-type":"application/json"
+		}
+		let options = {
+			host: "x.x.x.x",
+			path: query,
+			method: httpMethod,
+			headers: header,
+			rejectUnauthorized: false
+		}
+		let httpReq = https.request(options, function(r) {
+			//console.log("headers = " , r.headers);
+			//console.log("headers = " , r.statusCode);
+			r.setEncoding('utf8');
+			if (httpMethod !== 'DELETE') {
+				r.on('data',(d)=>{
+					resolve({code:r.statusCode,data:d});
+				});
+			} else {
+				//code 204 means success
+				resolve({code:r.statusCode});
+			}
+		});
+		if (httpMethod === 'PUT' || httpMethod === 'POST') {
+			httpReq.write(body);
+		}
+		httpReq.end();
+		httpReq.on('error',(err)=>{
+			reject(new Error(err.message));
+		});
+	});
 }
