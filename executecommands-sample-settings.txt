@@ -1,0 +1,4 @@
+user=cm_remote_user 
+password=cisco
+delay=0
+8851=Key:Applications,Key:KeyPad6,Key:KeyPad1,Key:KeyPad1,Key:KeyPad8
