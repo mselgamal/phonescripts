@@ -9,9 +9,9 @@
     required:
         - settings file that determines commands and necessary settings
         - sample format, see --help for details:
-            user=cm_remote_user
-            password=cisco123!
-            delay=0
+            user=cm_remote_user   // represents cm application accounts that has control of device and correct api group settings
+            password=cisco
+            delay=0               // sets delay between each http request to 0, default is 1000ms
             8851=Key:Applications,Key:KeyPad6,Key:KeyPad1,Key:KeyPad1,Key:KeyPad8
 */
 let start = ()=> {
