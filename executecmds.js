@@ -5,6 +5,14 @@
     - if -f then makeMultipleReqs(), this represents a file with multiple devices
     - elseif -a then makeReq(), represents a single device
     - --help for information on how to run script
+    
+    required:
+        - settings file that determines commands and necessary settings
+        - sample format:
+            user=cm_remote_user
+            password=cisco123!
+            delay=0
+            8851=Key:Applications,Key:KeyPad6,Key:KeyPad1,Key:KeyPad1,Key:KeyPad8
 */
 let start = ()=> {
     let http = require('http');
