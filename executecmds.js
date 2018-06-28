@@ -8,7 +8,7 @@
     
     required:
         - settings file that determines commands and necessary settings
-        - sample format:
+        - sample format, see --help for details:
             user=cm_remote_user
             password=cisco123!
             delay=0
