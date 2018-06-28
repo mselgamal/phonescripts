@@ -204,7 +204,11 @@ let start = ()=> {
             });
         });
     }
-
+    
+    /*
+        create necessary http options and headers
+        and return object
+    */
     function getHttpOptions(ip) {
         let headers = {
             'Authorization': host.auth, 
